@@ -1,7 +1,4 @@
-// Author: Christian Carpena
 // CS643-852 Programming Assignment 1
-// This code is intended to run on EC2 A
-// Used the GitHub repository for code references: https://github.com/awsdocs/aws-doc-sdk-examples/blob/master/javav2/example_code/
 
 package net.njit.cc362;
 
