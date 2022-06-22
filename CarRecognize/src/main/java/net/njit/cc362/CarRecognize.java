@@ -1,23 +1,12 @@
-// CS643-852 Programming Assignment 1
-
 package net.njit.cc362;
-
-//Region Service = US_EAST_1
 import software.amazon.awssdk.regions.Region;
-//Client for Rekognition service
 import software.amazon.awssdk.services.rekognition.RekognitionClient;
-//Using Image,Label,DetectLabelsRequest,DetectLabelsResponse, S3Object Objects
 import software.amazon.awssdk.services.rekognition.model.*;
-//Client for S3 service
 import software.amazon.awssdk.services.s3.S3Client;
-//Using ListObjectsV2Request,ListObjectsV2Response Objects
 import software.amazon.awssdk.services.s3.model.*;
-//Client for SQS service
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.sqs.SqsClient;
-//Using CreateQueueRequest,GetQueueRequest,ListQueuesRequest,ListQueuesResponse,QueueNameExistsException,SendMessageRequest
 import software.amazon.awssdk.services.sqs.model.*;
-//List,Map
 import java.util.*;
 
 public class CarRecognize {
@@ -25,7 +14,7 @@ public class CarRecognize {
     public static void main(String[] args) {
 
         String bucketName = "njit-cs-643";
-        String queueName = "car.fifo"; // -1 is the last on to get processed in the FIFO queue
+        String queueName = "car.fifo";
         String queueGroup = "group1";
 
         S3Client s3 = S3Client.builder()
@@ -42,9 +31,8 @@ public class CarRecognize {
     }
 
     public static void processBucketImages(S3Client s3, RekognitionClient rek, SqsClient sqs, String bucketName,
-                                           String queueName, String queueGroup) {
+            String queueName, String queueGroup) {
 
-        // Create queue or retrieve the queueUrl if it already exists.
         String queueUrl = "";
         try {
             ListQueuesRequest QueReq = ListQueuesRequest.builder()
@@ -70,7 +58,6 @@ public class CarRecognize {
             throw e;
         }
 
-        // Process the 10 images in the S3 bucket
         try {
             ListObjectsV2Request listObjectsReqManual = ListObjectsV2Request.builder().bucket(bucketName).maxKeys(10)
                     .build();
@@ -80,7 +67,7 @@ public class CarRecognize {
                 System.out.println("Gathered image in njit-cs-643 S3 bucket: " + obj.key());
 
                 Image img = Image.builder().s3Object(software.amazon.awssdk.services.rekognition.model.S3Object
-                                .builder().bucket(bucketName).name(obj.key()).build())
+                        .builder().bucket(bucketName).name(obj.key()).build())
                         .build();
                 DetectLabelsRequest request = DetectLabelsRequest.builder().image(img).minConfidence((float) 90)
                         .build();
@@ -96,7 +83,6 @@ public class CarRecognize {
                 }
             }
 
-            // Signal the end of image processing by sending "-1" to the queue
             sqs.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageGroupId(queueGroup).messageBody("-1")
                     .build());
         } catch (Exception e) {

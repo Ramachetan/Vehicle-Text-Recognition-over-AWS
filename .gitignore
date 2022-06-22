@@ -2,6 +2,7 @@ target/
 .settings
 .classpath
 .project
+.metadata
 .vscode
 .idea
 *.txt
