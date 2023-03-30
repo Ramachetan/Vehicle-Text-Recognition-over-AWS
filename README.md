@@ -1,8 +1,8 @@
-#Setting Up EC2 Instances for Text and Car Recognition
+# Setting Up EC2 Instances for Text and Car Recognition
 
 This guide provides step-by-step instructions for setting up two Amazon EC2 instances, EC2_A and EC2_B, to run text and car recognition code simultaneously.
 
-##EC2 Setup
+## EC2 Setup
 
 1. Log in to the AWS Management Console and click on "Services" -> "EC2".
 2. In the "Instances" section, click on "Launch Instances" -> "Launch Instances".
@@ -25,7 +25,7 @@ This guide provides step-by-step instructions for setting up two Amazon EC2 inst
 19. Hit "Launch Instances".
 20. Hit "View Instances".
 
-##Permissions Setup
+## Permissions Setup
 
 1. Run the following command to set the correct permissions for the .pem file: `$ chmod 400 EC2_A_CS643.pem`.
 2. Use Putty to connect to the instance.
@@ -56,6 +56,7 @@ aws_access_key_id= THI5I5NOTTH3ACCE55K3Y
 aws_secret_access_key= THI5I5NOTTH3S3CR3TACCE55K3Y
 
 Note: You will need to re-copy and paste these credentials onto both EC2's whenever they change (after your session ends).
+
 ## Java/Git Installation
 
 1. If you do not have an up-to-date version of Java or Maven installed on your local machine, run the following commands locally: `$ sudo amazon-linux-extras install java-openjdk11`, `$ java -version`, and `$ alternatives --config java`. Now select the one which has JAVA 11.
